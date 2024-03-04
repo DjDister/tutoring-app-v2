@@ -6,10 +6,12 @@ const useMessages = (roomId: string) => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    if (!socket.connected) socket.emit("joinRoom", roomId);
-    socket.on("message", (message: Message) => {
-      console.log("message recieved", message);
-      setMessages((prevMessages) => [...prevMessages, message]);
+    if (!socket.connected) socket.emit("join_message_room", roomId);
+    socket.on("message", (message) => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { ...message, userName: "Other" },
+      ]);
     });
 
     return () => {
