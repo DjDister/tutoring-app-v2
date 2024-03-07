@@ -177,9 +177,7 @@ export default function ExcalidrawWrapper({
         renderTopRightUI={() => (
           <LiveCollaborationTrigger
             isCollaborating={onSocket}
-            onSelect={() => {
-              window.alert("You clicked on collab button");
-            }}
+            onSelect={() => null}
           />
         )}
       >
