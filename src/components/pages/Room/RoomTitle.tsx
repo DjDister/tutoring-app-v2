@@ -1,8 +1,6 @@
 "use client";
 
 import DoorSvg from "@/assets/svgs/DoorSvg";
-import React from "react";
-import NameInput from "./NameInput";
 import { useRouter } from "next/navigation";
 
 export default function RoomTitle({ roomId }: { roomId: string }) {
@@ -17,7 +15,6 @@ export default function RoomTitle({ roomId }: { roomId: string }) {
         <DoorSvg width={24} height={24} /> Leave
       </button>
       Room <span className="font-semibold">{roomId}</span>
-      <NameInput roomId={roomId} />
     </div>
   );
 }
