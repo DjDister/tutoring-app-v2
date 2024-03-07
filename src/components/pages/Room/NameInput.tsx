@@ -9,6 +9,7 @@ import { resetPointers } from "@/lib/modules/excalidrawPointersSlice";
 
 export default function NameInput({ roomId }: { roomId: string }) {
   const [userNameInput, setUserNameInput] = useState("");
+  const [disableChange, setDisableChange] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -16,12 +17,13 @@ export default function NameInput({ roomId }: { roomId: string }) {
     if (!userNameInput) return;
     dispatch(resetPointers());
     router.push(`/room/${roomId}?userId=${userNameInput}`);
+    setDisableChange(true);
   };
 
   return (
     <>
       <Input
-        disabled={userNameInput.length > 0}
+        disabled={disableChange}
         value={userNameInput}
         placeholder="Enter username"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -32,10 +34,7 @@ export default function NameInput({ roomId }: { roomId: string }) {
         }}
         className="w-1/2"
       />
-      <button
-        disabled={userNameInput.length > 0}
-        onClick={handleUsernameChange}
-      >
+      <button disabled={disableChange} onClick={handleUsernameChange}>
         <ArrowRightIcon />
       </button>
     </>
