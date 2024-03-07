@@ -9,6 +9,7 @@ export default function Home() {
   const router = useRouter();
 
   const handleJoinRoom = () => {
+    setEnterRoomId("");
     router.push(`/room/${enterRoomId}`);
   };
 
@@ -18,6 +19,11 @@ export default function Home() {
         <Input
           placeholder="Enter room id"
           onChange={(e) => setEnterRoomId(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleJoinRoom();
+            }
+          }}
         />
         <button
           className="p-2 px-4 flex bg-slate-200 rounded-md w-auto text-nowrap"
