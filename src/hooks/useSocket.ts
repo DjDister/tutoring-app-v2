@@ -7,14 +7,23 @@ import {
   ServerToClientEvents,
   ClientToServerEvents,
 } from "../../common/types/global";
+import { useAppDispatch } from "@/lib/hooks";
+import { addUser, removeUser } from "@/lib/modules/usersConnectedSlice";
 
-export const useSocket = ({ room_Name }: { room_Name: string }) => {
+export const useSocket = ({
+  room_Name,
+  getUser,
+}: {
+  room_Name: string;
+  getUser: string;
+}) => {
   const [onSocket, setOnSocket] = useState(false);
   const socketRef = useRef<Socket<
     ServerToClientEvents,
     ClientToServerEvents
   > | null>(null);
   const { handleExcalidrawSelectDispatch } = useExcalidrawSlice();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (onSocket) {
       const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
@@ -22,10 +31,11 @@ export const useSocket = ({ room_Name }: { room_Name: string }) => {
       if (socketRef.current) {
         const socket = socketRef.current;
         socket.on("connect", () => {
+          dispatch(addUser({ socketId: socket.id, userName: getUser }));
           socket.on("error", (error: any) => {
             console.error("Socket connection error:", error);
           });
-          socket.emit("join_room", room_Name);
+          socket.emit("join_room", { room: room_Name, userName: getUser });
 
           socket.on("stream_receive_message", (data) => {
             handleExcalidrawSelectDispatch(Redux.setStreamEl, data);
@@ -54,6 +64,14 @@ export const useSocket = ({ room_Name }: { room_Name: string }) => {
           socket.on("stream_pointer_receive_message", (data) => {
             // setPointer
             handleExcalidrawSelectDispatch(setPointer, data);
+          });
+
+          socket.on("user_joined", (data) => {
+            dispatch(addUser(data));
+          });
+
+          socket.on("user_disconnected", (userId) => {
+            dispatch(removeUser(userId));
           });
         });
       }

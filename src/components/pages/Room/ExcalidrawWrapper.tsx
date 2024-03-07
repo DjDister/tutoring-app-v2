@@ -24,8 +24,13 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import { useExcalidraw } from "@/hooks/useExcalidraw";
 import { useSocket } from "@/hooks/useSocket";
-import { MainMenu, WelcomeScreen } from "@excalidraw/excalidraw";
+import {
+  LiveCollaborationTrigger,
+  MainMenu,
+  WelcomeScreen,
+} from "@excalidraw/excalidraw";
 import UserPointers from "./UserPointers";
+import { selectUsersConnectedSlice } from "@/lib/modules/usersConnectedSlice";
 
 export default function ExcalidrawWrapper({
   params,
@@ -35,9 +40,12 @@ export default function ExcalidrawWrapper({
   const { roomId } = params;
   const totalStore = useAppSelector(selectExcalidrawElements);
   const getUserId = useSearchParams().get("userId") || "";
-  const { socketAPI, onSocket, setOnSocket } = useSocket({ room_Name: roomId });
+  const { socketAPI, onSocket, setOnSocket } = useSocket({
+    room_Name: roomId,
+    getUser: getUserId,
+  });
   const StoreElsLeng = totalStore.length || 0;
-
+  const usersConnected = useAppSelector(selectUsersConnectedSlice);
   const {
     excalidrawRef,
     handleChangePointerState,
@@ -47,6 +55,11 @@ export default function ExcalidrawWrapper({
     handle_OtherReset,
     handleChange_StrokeColorEls,
   } = useExcalidraw(getUserId, roomId, socketAPI);
+
+  const collaborators = new Map(
+    usersConnected.map((user) => [user.socketId, { username: user.userName }])
+  );
+  excalidrawRef.current?.updateScene({ collaborators });
 
   const onExcalidrawAPI = (api: ExcalidrawTypes.ExcalidrawImperativeAPI) =>
     (excalidrawRef.current = api);
@@ -161,6 +174,14 @@ export default function ExcalidrawWrapper({
             image: false,
           },
         }}
+        renderTopRightUI={() => (
+          <LiveCollaborationTrigger
+            isCollaborating={onSocket}
+            onSelect={() => {
+              window.alert("You clicked on collab button");
+            }}
+          />
+        )}
       >
         <MainMenu>
           <MainMenu.Item

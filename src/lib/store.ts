@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import excalidrawSlice from "./modules/excalidrawSlice";
 import excalidrawMovedSlice from "./modules/excalidrawMovedSlice";
 import excalidrawPointersSlice from "./modules/excalidrawPointersSlice";
+import usersConnectedSlice from "./modules/usersConnectedSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -9,6 +10,7 @@ export const makeStore = () => {
       excalidrawSlice,
       excalidrawMovedSlice,
       excalidrawPointersSlice,
+      usersConnectedSlice,
     },
   });
 };

@@ -11,14 +11,14 @@ export interface ServerToClientEvents {
   change_strokeColor_receive_message: (data: MESSAGE_ElsProps) => void;
   remove_receive_message: (data: MESSAGE_ElProps) => void;
   stream_pointer_receive_message: (data: STREAM_POINTER) => void;
-  user_joined: (userId: string) => void;
+  user_joined: (user: ConnectedUser) => void;
   user_disconnected: (userId: string) => void;
 }
 
 export interface ClientToServerEvents {
   sendMessage: (data: MessageToSend) => void;
   join_message_room: (room: string) => void;
-  join_room: (room: string) => void;
+  join_room: ({ room, userName }: { room: string; userName: string }) => void;
   stream_message: (data: MESSAGE_ElProps) => void;
   stream_move_Element: (data: MESSAGE_ElsProps) => void;
   add_message: (data: MESSAGE_ElProps) => void;
@@ -26,6 +26,11 @@ export interface ClientToServerEvents {
   change_strokeColor_message: (data: MESSAGE_ElsProps) => void;
   remove_message: (data: MESSAGE_ElProps) => void;
   stream_pointer: (data: STREAM_POINTER) => void;
+}
+
+export interface ConnectedUser {
+  socketId: string;
+  userName: string;
 }
 
 export interface Message {

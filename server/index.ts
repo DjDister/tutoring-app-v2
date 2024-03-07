@@ -40,9 +40,13 @@ nextApp
 
     io.on("connection", (socket) => {
       debug("a user connected", socket.id);
-      socket.on("join_room", (room) => {
-        debug("joined room", room, socket.id);
-        socket.join(room);
+      socket.on("join_room", (data) => {
+        debug("joined room", data.room, socket.id);
+        socket.join(data.room);
+        socket.to(data.room).emit("user_joined", {
+          socketId: socket.id,
+          userName: data.userName,
+        });
       });
       // socket.to(data.room).emit("initData_message", data)  // DB
 
@@ -87,6 +91,11 @@ nextApp
 
       socket.on("sendMessage", (data) => {
         socket.to(data.room).emit("message", data);
+      });
+
+      socket.on("disconnect", () => {
+        debug("user disconnected", socket.id);
+        socket.broadcast.emit("user_disconnected", socket.id);
       });
     });
 
