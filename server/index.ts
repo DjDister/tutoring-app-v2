@@ -8,6 +8,7 @@ import {
   ClientToServerEvents,
   ServerToClientEvents,
 } from "../common/types/global";
+const debug = require("debug")("socket-server");
 dotenv.config();
 
 const port = parseInt(process.env.PORT || "3000", 10);
@@ -19,6 +20,10 @@ nextApp
   .prepare()
   .then(async () => {
     const app = express();
+    app.use((req, _, next) => {
+      debug(`${req.method} ${req.url}`);
+      next();
+    });
     const server = createServer(app);
 
     const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
@@ -34,49 +39,49 @@ nextApp
     app.all("*", (req: any, res: any) => nextHandler(req, res));
 
     io.on("connection", (socket) => {
-      console.log("a user connected", socket.id);
+      debug("a user connected", socket.id);
       socket.on("join_room", (room) => {
-        console.log("joined room", room, socket.id);
+        debug("joined room", room, socket.id);
         socket.join(room);
       });
       // socket.to(data.room).emit("initData_message", data)  // DB
 
       socket.on("stream_message", (data) => {
-        console.log(data);
+        debug(data);
         socket.to(data.room).emit("stream_receive_message", data);
       });
 
       socket.on("stream_move_Element", (data) => {
-        console.log(data);
+        debug(data);
         socket.to(data.room).emit("stream_move_receive_message", data);
       });
 
       socket.on("add_message", (data) => {
-        console.log(data);
+        debug(data);
         socket.to(data.room).emit("add_receive_message", data);
       });
 
       socket.on("move_message", (data) => {
-        console.log(data);
+        debug(data);
         socket.to(data.room).emit("move_receive_message", data);
       });
       socket.on("change_strokeColor_message", (data) => {
-        console.log(data);
+        debug(data);
         socket.to(data.room).emit("change_strokeColor_receive_message", data);
       });
 
       socket.on("remove_message", (data) => {
-        console.log(data);
+        debug(data);
         socket.to(data.room).emit("remove_receive_message", data);
       });
 
       socket.on("stream_pointer", (data) => {
-        console.log(data);
+        debug(data);
         socket.to(data.room).emit("stream_pointer_receive_message", data);
       });
 
       socket.on("join_message_room", async (room) => {
-        console.log("joined message room", room, socket.id);
+        debug("joined message room", room, socket.id);
         socket.join(room);
       });
 
