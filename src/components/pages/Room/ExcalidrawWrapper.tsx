@@ -24,7 +24,8 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import { useExcalidraw } from "@/hooks/useExcalidraw";
 import { useSocket } from "@/hooks/useSocket";
-import { MainMenu } from "@excalidraw/excalidraw";
+import { MainMenu, WelcomeScreen } from "@excalidraw/excalidraw";
+import UserPointers from "./UserPointers";
 
 export default function ExcalidrawWrapper({
   params,
@@ -146,17 +147,38 @@ export default function ExcalidrawWrapper({
   };
 
   return (
-    <Excalidraw
-      initialData={null}
-      excalidrawAPI={onExcalidrawAPI}
-      onChange={onChange}
-      onPointerUpdate={onPointerUpdate}
-    >
-      <MainMenu>
-        <MainMenu.Item onSelect={() => setOnSocket((prevState) => !prevState)}>
-          {onSocket ? "Stop collaboration board" : "Start collaboration board"}
-        </MainMenu.Item>
-      </MainMenu>
-    </Excalidraw>
+    <>
+      <UserPointers />
+      <Excalidraw
+        initialData={null}
+        excalidrawAPI={onExcalidrawAPI}
+        onChange={onChange}
+        onPointerUpdate={onPointerUpdate}
+        isCollaborating={onSocket}
+        gridModeEnabled={true}
+        UIOptions={{
+          tools: {
+            image: false,
+          },
+        }}
+      >
+        <MainMenu>
+          <MainMenu.Item
+            onSelect={() => setOnSocket((prevState) => !prevState)}
+          >
+            {onSocket
+              ? "Stop collaboration board"
+              : "Start collaboration board"}
+          </MainMenu.Item>
+        </MainMenu>
+        <WelcomeScreen>
+          <WelcomeScreen.Hints.MenuHint>
+            <h1 style={{ fontSize: 28, width: "fit" }}>
+              Start collaboration here
+            </h1>
+          </WelcomeScreen.Hints.MenuHint>
+        </WelcomeScreen>
+      </Excalidraw>
+    </>
   );
 }

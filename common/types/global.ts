@@ -11,6 +11,8 @@ export interface ServerToClientEvents {
   change_strokeColor_receive_message: (data: MESSAGE_ElsProps) => void;
   remove_receive_message: (data: MESSAGE_ElProps) => void;
   stream_pointer_receive_message: (data: STREAM_POINTER) => void;
+  user_joined: (userId: string) => void;
+  user_disconnected: (userId: string) => void;
 }
 
 export interface ClientToServerEvents {

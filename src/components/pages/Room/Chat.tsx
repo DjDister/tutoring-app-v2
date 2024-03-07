@@ -1,3 +1,4 @@
+"use client";
 import { Input } from "@/components/ui/input";
 import useMessages from "@/hooks/useMessages";
 import React, { useState } from "react";

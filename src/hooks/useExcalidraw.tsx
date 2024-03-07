@@ -58,7 +58,8 @@ export const useExcalidraw = (
       y: pointer.y,
       writerId: getUserId,
     };
-    // socketAPI && socketAPI.emit('stream_pointer',{ room, message: streamPointer})
+    socketAPI &&
+      socketAPI.emit("stream_pointer", { room, message: streamPointer });
     dispatch(setPointer(streamPointer));
   };
 
@@ -109,6 +110,7 @@ export const useExcalidraw = (
   const handleStreaming_addEl = ({ data }: handle_ElProps) => {
     socketAPI && socketAPI.emit("stream_message", { room, message: data });
   };
+
   const handleStreaming_MoveEls = ({ data }: handle_ElsProps) => {
     socketAPI && socketAPI.emit("stream_move_Element", { room, message: data });
     const findIds = data.map(({ id }) => id);
@@ -116,12 +118,14 @@ export const useExcalidraw = (
     console.log("handleStreaming_MoveEls");
     dispatch(ExcalidrawSlice.setChange_Els(data));
   };
+
   const handleChange_StrokeColorEls = ({ data }: handle_ElsProps) => {
     socketAPI &&
       socketAPI.emit("change_strokeColor_message", { room, message: data });
     console.log("handleChange_StrokeColorEls");
     dispatch(ExcalidrawSlice.setChange_Els(data));
   };
+
   const handle_OtherReset = (
     originOtherEls: ExcalidrawSlice.ExcalidrawCustomDTO[]
   ) => {
@@ -132,15 +136,18 @@ export const useExcalidraw = (
   const handle_addEl = ({ data }: handle_ElProps) => {
     socketAPI && socketAPI.emit("add_message", { room, message: data });
   };
+
   const handle_MoveEls = ({ data }: handle_ElsProps) => {
     socketAPI && socketAPI.emit("move_message", { room, message: data });
     dispatch(ExcalidrawMoveSlice.setMovedEls([]));
     dispatch(ExcalidrawSlice.setChange_Els(data));
   };
+
   const on_remove = ({ data }: handleRemove_ElsProps) => {
     socketAPI && socketAPI.emit("remove_message", { room, message: data });
     dispatch(ExcalidrawSlice.setRemove_Els(data));
   };
+
   const on_recoverOther = () => {
     dispatch(ExcalidrawSlice.setRecoverOther_Els());
   };
@@ -156,6 +163,7 @@ export const useExcalidraw = (
     const findOtherEls = deletedEls.filter(
       ({ writerId }) => writerId != getUserId
     );
+
     const isFindOwsEls = Boolean(findOwsEls.length);
     const isfindOtherEls = Boolean(findOtherEls.length);
 

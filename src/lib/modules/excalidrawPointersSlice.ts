@@ -32,10 +32,13 @@ export const excalidrawPointersSlice = createSlice({
         : [...state, { ...payload, color: getRandomColor() }];
       return currentList;
     },
+    resetPointers: () => {
+      return initialState;
+    },
   },
 });
 
-export const { setPointer } = excalidrawPointersSlice.actions;
+export const { setPointer, resetPointers } = excalidrawPointersSlice.actions;
 export const selectExcalidrawPointers = (state: RootState) =>
   state.excalidrawPointersSlice;
 export default excalidrawPointersSlice.reducer;
