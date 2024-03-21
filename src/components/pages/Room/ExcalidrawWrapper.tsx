@@ -161,7 +161,7 @@ export default function ExcalidrawWrapper({
 
   return (
     <>
-      <UserPointers />
+      {/* <UserPointers /> */}
       <Excalidraw
         initialData={null}
         excalidrawAPI={onExcalidrawAPI}
