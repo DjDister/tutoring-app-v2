@@ -10,7 +10,7 @@ export default function Room({ params }: { params: { roomId: string } }) {
     <div className="flex h-screen w-full relative overflow-hidden">
       <div className="h-full w-full flex flex-col">
         <RoomTitle roomId={roomId} />
-        <div className="w-full h-full relative flex justify-between cursor-none">
+        <div className="w-full h-full relative flex justify-between">
           <ExcalidrawWrapper params={{ roomId: roomId }} />
         </div>
       </div>
