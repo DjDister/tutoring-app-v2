@@ -24,7 +24,7 @@ enum StrokeRoundnessEnum {
   ROUND = "round",
   SHARP = "sharp",
 }
-type SOCKETAPI_TYPE = Socket | any | null;
+type SOCKETAPI_TYPE = Socket | null;
 type handle_ElProps = {
   data: ExcalidrawSlice.ExcalidrawCustomDTO;
 };
